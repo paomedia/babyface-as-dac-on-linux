@@ -1,0 +1,21 @@
+#!/usr/bin/python3
+
+import usb1
+
+VENDOR_ID = 0x2a39
+DEVICE_ID = 0x3fc0
+INTERFACE = 0
+
+with usb1.USBContext() as context:
+    handle = context.openByVendorIDAndProductID(
+        VENDOR_ID,
+        DEVICE_ID,
+        skip_on_error=True,
+    )
+    if handle is None:
+        print('FAIL')
+    with handle.claimInterface(INTERFACE):
+        handle.controlWrite(0x40, 0x12, 0x2000, 0x0004, b"")
+        handle.controlWrite(0x40, 0x12, 0x2000, 0x001F, b"")
+        print('DONE')
+        
